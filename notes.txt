@@ -1,0 +1,8 @@
+write unit tests for DTO
+    - https://stackoverflow.com/questions/29069956/how-to-test-validation-annotations-of-a-class-using-junit
+    - https://karuppiah7890.github.io/blog/posts/validating-beans-and-testing-it/
+handle DTO error response structure
+    - https://salithachathuranga94.medium.com/validation-and-exception-handling-in-spring-boot-51597b580ffd
+controller test
+    - https://reflectoring.io/spring-boot-web-controller-test/
+    - https://www.bezkoder.com/spring-boot-webmvctest/
