@@ -4,8 +4,6 @@ import jakarta.validation.Valid;
 import org.example.user.repository.User;
 import org.example.user.service.UserService;
 import org.example.utility.Response;
-import org.hibernate.validator.constraints.UUID;
-import org.hibernate.validator.internal.constraintvalidators.hv.UUIDValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
