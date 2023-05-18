@@ -28,6 +28,7 @@ public class UserHandler {
         if(userService.UserExists(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Response.EMAIL_ALREADY_EXISTS);
         }
+        userService.hashPassword(user);
         userService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.USER_CREATED);
     }

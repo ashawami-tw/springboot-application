@@ -11,10 +11,6 @@ import org.example.utility.Validator;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private static final int PASSWORD_MIN_SIZE = 8;
-    private static final int PASSWORD_MAX_SIZE = 15;
-    private static final String PASSWORD_SPECIAL_CHARS = "@#$%^&+=*";
-
     @NotBlank(message = Response.INVALID_EMAIL)
     @Email(message = Response.INVALID_EMAIL)
     private String email;
