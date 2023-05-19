@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +22,9 @@ public class UserServiceTest {
 
     @Mock
     private UserRepo userRepo;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @Captor
     private ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
@@ -39,6 +43,18 @@ public class UserServiceTest {
 
         assertEquals(user.getEmail(), savedUser.getEmail());
         assertEquals(user.getPassword(), savedUser.getPassword());
+    }
+
+    @Test
+    public void testHashPassword() {
+        String hash = "$2a$10$EzbrJCN8wj8M8B5aQiRmiuWqVvnxna73Ccvm38aoneiJb88kkwlH2";
+        User user = User.builder().email(EMAIL).password(PASSWORD).build();
+        when(passwordEncoder.encode(PASSWORD)).thenReturn(hash);
+
+        userService.hashPassword(user);
+
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(hash, user.getPassword());
     }
 
     @Test
@@ -61,5 +77,4 @@ public class UserServiceTest {
         assertFalse(isUserPresent);
         verify(userRepo).findByEmail(EMAIL);
     }
-
 }

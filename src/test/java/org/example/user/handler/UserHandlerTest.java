@@ -32,6 +32,7 @@ public class UserHandlerTest {
         when(userService.userExists(EMAIL)).thenReturn(true);
 
         ResponseEntity<String> response = userHandler.create(userDto);
+
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
         assertEquals(response.getBody(), Response.EMAIL_ALREADY_EXISTS);
     }
@@ -42,6 +43,7 @@ public class UserHandlerTest {
         when(userService.userExists(EMAIL)).thenReturn(false);
 
         ResponseEntity<String> response = userHandler.create(userDto);
+
         assertEquals(response.getStatusCode(), HttpStatus.CREATED);
         assertEquals(response.getBody(), Response.USER_CREATED);
     }
