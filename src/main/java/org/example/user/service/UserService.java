@@ -23,7 +23,7 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public boolean UserExists(String email) {
+    public boolean userExists(String email) {
         Optional<User> user = Optional.ofNullable(userRepo.findByEmail(email));
         return user.isPresent();
     }

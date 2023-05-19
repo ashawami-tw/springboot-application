@@ -25,7 +25,7 @@ public class UserHandler {
     @PostMapping
     public ResponseEntity<String> create(@Valid @RequestBody UserDto userDto) {
         User user = User.create(userDto);
-        if(userService.UserExists(user.getEmail())) {
+        if(userService.userExists(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Response.EMAIL_ALREADY_EXISTS);
         }
         userService.hashPassword(user);
