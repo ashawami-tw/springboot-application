@@ -6,3 +6,5 @@ handle DTO error response structure
 controller test
     - https://reflectoring.io/spring-boot-web-controller-test/
     - https://www.bezkoder.com/spring-boot-webmvctest/
+integration test
+    - https://1kevinson.com/integration-testing-with-springboot-docker-and-tests-containers/
