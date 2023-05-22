@@ -1,6 +1,7 @@
-package org.example.user.handler;
+package org.example.unit.user.handler;
 
-import org.example.user.repository.User;
+import org.example.user.handler.UserDto;
+import org.example.user.handler.UserHandler;
 import org.example.user.service.UserService;
 import org.example.utility.Response;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -34,7 +34,7 @@ public class UserHandlerTest {
         ResponseEntity<String> response = userHandler.create(userDto);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertEquals(response.getBody(), Response.EMAIL_ALREADY_EXISTS);
+        assertEquals(Response.EMAIL_ALREADY_EXISTS, response.getBody());
     }
 
     @Test
@@ -44,8 +44,8 @@ public class UserHandlerTest {
 
         ResponseEntity<String> response = userHandler.create(userDto);
 
-        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
-        assertEquals(response.getBody(), Response.USER_CREATED);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(Response.USER_CREATED, response.getBody());
     }
 
 }

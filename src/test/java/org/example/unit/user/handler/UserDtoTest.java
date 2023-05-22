@@ -1,9 +1,10 @@
-package org.example.user.handler;
+package org.example.unit.user.handler;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.example.user.handler.UserDto;
 import org.example.utility.Response;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, VALID_PASSWORD);
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 0);
+        assertEquals(0, constraintViolations.size());
     }
 
     @Test
@@ -37,8 +38,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto("", VALID_PASSWORD);
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_EMAIL);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_EMAIL, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -46,8 +47,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto("test.com", VALID_PASSWORD);
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_EMAIL);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_EMAIL, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -55,7 +56,7 @@ public class UserDtoTest {
         UserDto userDto = new UserDto("test@gmail", VALID_PASSWORD);
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 0);
+        assertEquals(0, constraintViolations.size());
     }
 
     @Test
@@ -63,8 +64,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto("@gmail.com", VALID_PASSWORD);
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_EMAIL);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_EMAIL, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -72,8 +73,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -81,8 +82,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "abc");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -90,8 +91,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "invalid_password_20");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -99,8 +100,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "PASSWORD1@");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -108,8 +109,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "password1@");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -117,8 +118,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "Password@");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -126,8 +127,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "Password1");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -135,8 +136,8 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "Password 1");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -144,7 +145,7 @@ public class UserDtoTest {
         UserDto userDto = new UserDto(VALID_EMAIL, "Password1~");
         Set<ConstraintViolation<UserDto>> constraintViolations = validator.validate(userDto);
 
-        assertEquals(constraintViolations.size(), 1);
-        assertEquals(constraintViolations.iterator().next().getMessage(), Response.INVALID_PASSWORD);
+        assertEquals(1, constraintViolations.size());
+        assertEquals(Response.INVALID_PASSWORD, constraintViolations.iterator().next().getMessage());
     }
 }

@@ -1,7 +1,8 @@
-package org.example.user.service;
+package org.example.unit.user.service;
 
 import org.example.user.repository.User;
 import org.example.user.repository.UserRepo;
+import org.example.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
