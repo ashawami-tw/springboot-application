@@ -3,7 +3,9 @@ package org.example.integration.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.integration.config.PostgresqlInit;
 import org.example.user.handler.UserDto;
+import org.example.user.repository.User;
 import org.example.user.repository.UserRepo;
+import org.example.utility.AppConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Optional;
 
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +37,9 @@ public class CreateUserIntTest extends PostgresqlInit {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private AppConfig appConfig;
+
     @AfterEach
     public void tearDown() {
         userRepo.deleteAll();
@@ -46,6 +53,27 @@ public class CreateUserIntTest extends PostgresqlInit {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
-        assertEquals(1, userRepo.findAll().size());
+        Optional<User> savedUser = Optional.ofNullable(userRepo.findByEmail(EMAIL));
+        assertTrue(savedUser.isPresent());
+        assertEquals(EMAIL, savedUser.get().getEmail());
+        assertTrue(appConfig.decodePassword(savedUser.get().getPassword(), PASSWORD));
+    }
+
+    @Test
+    public void testCreateDuplicateUser() throws Exception{
+        UserDto userDto = new UserDto(EMAIL, PASSWORD);
+        mockMvc.perform(post("/user")
+                        .content(new ObjectMapper().writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/user")
+                        .content(new ObjectMapper().writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        Optional<User> savedUser = Optional.ofNullable(userRepo.findByEmail(EMAIL));
+        assertTrue(savedUser.isPresent());
+        assertEquals(1, savedUser.stream().count());
     }
 }
