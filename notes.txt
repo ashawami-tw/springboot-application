@@ -8,3 +8,7 @@ controller test
     - https://www.bezkoder.com/spring-boot-webmvctest/
 integration test
     - https://1kevinson.com/integration-testing-with-springboot-docker-and-tests-containers/
+dockerfile
+    - https://codefresh.io/docs/docs/example-catalog/ci-examples/gradle/
+    - https://stackoverflow.com/questions/37482716/using-docker-to-launch-web-app-cant-connect-to-postgresql-db
+    - https://stackoverflow.com/questions/45264410/cannot-connect-dockerized-spring-boot-app-to-dockerized-postgre-sql?rq=4
