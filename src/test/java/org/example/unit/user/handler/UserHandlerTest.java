@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,8 +36,8 @@ public class UserHandlerTest {
 
         ResponseEntity<Response> response = userHandler.create(userDto);
 
-        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertEquals(Message.EMAIL_ALREADY_EXISTS, Objects.requireNonNull(response.getBody()).getMessage().get(0));
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(Objects.requireNonNull(response.getBody()).getMessage().get(0)).isEqualTo(Message.EMAIL_ALREADY_EXISTS);
     }
 
     @Test
@@ -47,8 +47,8 @@ public class UserHandlerTest {
 
         ResponseEntity<Response> response = userHandler.create(userDto);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(Message.USER_CREATED, Objects.requireNonNull(response.getBody()).getMessage().get(0));
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(Objects.requireNonNull(response.getBody()).getMessage().get(0)).isEqualTo(Message.USER_CREATED);
     }
 
 }

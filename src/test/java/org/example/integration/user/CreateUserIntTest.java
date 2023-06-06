@@ -19,7 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.Optional;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,9 +54,9 @@ public class CreateUserIntTest extends PostgresqlInit {
                 .andExpect(status().isCreated());
 
         Optional<User> savedUser = Optional.ofNullable(userRepo.findByEmail(EMAIL));
-        assertTrue(savedUser.isPresent());
-        assertEquals(EMAIL, savedUser.get().getEmail());
-        assertTrue(appConfig.decodePassword(savedUser.get().getPassword(), PASSWORD));
+        assertThat(savedUser.isPresent()).isTrue();
+        assertThat(savedUser.get().getEmail()).isEqualTo(EMAIL);
+        assertThat(appConfig.decodePassword(savedUser.get().getPassword(), PASSWORD)).isTrue();
     }
 
     @Test
@@ -73,7 +73,7 @@ public class CreateUserIntTest extends PostgresqlInit {
                 .andExpect(status().isBadRequest());
 
         Optional<User> savedUser = Optional.ofNullable(userRepo.findByEmail(EMAIL));
-        assertTrue(savedUser.isPresent());
-        assertEquals(1, savedUser.stream().count());
+        assertThat(savedUser.isPresent()).isTrue();
+        assertThat(savedUser.stream().count()).isEqualTo(1);
     }
 }

@@ -13,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -42,8 +42,8 @@ public class UserServiceTest {
         verify(userRepo).save(userArgumentCaptor.capture());
         User savedUser = userArgumentCaptor.getValue();
 
-        assertEquals(user.getEmail(), savedUser.getEmail());
-        assertEquals(user.getPassword(), savedUser.getPassword());
+        assertThat(savedUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(savedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
     @Test
@@ -54,8 +54,8 @@ public class UserServiceTest {
 
         userService.hashPassword(user);
 
-        assertEquals(EMAIL, user.getEmail());
-        assertEquals(hash, user.getPassword());
+        assertThat(user.getEmail()).isEqualTo(EMAIL);
+        assertThat(user.getPassword()).isEqualTo(hash);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class UserServiceTest {
 
         boolean isUserPresent = userService.userExists(EMAIL);
 
-        assertTrue(isUserPresent);
+        assertThat(isUserPresent).isTrue();
         verify(userRepo).findByEmail(EMAIL);
     }
 
@@ -75,7 +75,7 @@ public class UserServiceTest {
 
         boolean isUserPresent = userService.userExists(EMAIL);
 
-        assertFalse(isUserPresent);
+        assertThat(isUserPresent).isFalse();
         verify(userRepo).findByEmail(EMAIL);
     }
 }
