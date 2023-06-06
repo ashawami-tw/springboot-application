@@ -6,6 +6,7 @@ import org.example.user.handler.UserDto;
 import org.example.user.repository.User;
 import org.example.user.repository.UserRepo;
 import org.example.utility.AppConfig;
+import org.example.utility.response.Message;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Testcontainers
@@ -51,7 +53,8 @@ public class CreateUserIntTest extends PostgresqlInit {
         mockMvc.perform(post("/user")
                 .content(new ObjectMapper().writeValueAsString(userDto))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message[0]").value(Message.USER_CREATED));
 
         Optional<User> savedUser = Optional.ofNullable(userRepo.findByEmail(EMAIL));
         assertThat(savedUser.isPresent()).isTrue();
@@ -65,12 +68,14 @@ public class CreateUserIntTest extends PostgresqlInit {
         mockMvc.perform(post("/user")
                         .content(new ObjectMapper().writeValueAsString(userDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message[0]").value(Message.USER_CREATED));
 
         mockMvc.perform(post("/user")
                         .content(new ObjectMapper().writeValueAsString(userDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message[0]").value(Message.EMAIL_ALREADY_EXISTS));
 
         Optional<User> savedUser = Optional.ofNullable(userRepo.findByEmail(EMAIL));
         assertThat(savedUser.isPresent()).isTrue();
