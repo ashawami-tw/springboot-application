@@ -3,7 +3,8 @@ package org.example.unit.user.handler;
 import org.example.user.handler.UserDto;
 import org.example.user.handler.UserHandler;
 import org.example.user.service.UserService;
-import org.example.utility.Response;
+import org.example.utility.response.Message;
+import org.example.utility.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -31,10 +34,10 @@ public class UserHandlerTest {
         UserDto userDto = new UserDto(EMAIL, PASSWORD);
         when(userService.userExists(EMAIL)).thenReturn(true);
 
-        ResponseEntity<String> response = userHandler.create(userDto);
+        ResponseEntity<Response> response = userHandler.create(userDto);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertEquals(Response.EMAIL_ALREADY_EXISTS, response.getBody());
+        assertEquals(Message.EMAIL_ALREADY_EXISTS, Objects.requireNonNull(response.getBody()).getMessage().get(0));
     }
 
     @Test
@@ -42,10 +45,10 @@ public class UserHandlerTest {
         UserDto userDto = new UserDto(EMAIL, PASSWORD);
         when(userService.userExists(EMAIL)).thenReturn(false);
 
-        ResponseEntity<String> response = userHandler.create(userDto);
+        ResponseEntity<Response> response = userHandler.create(userDto);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(Response.USER_CREATED, response.getBody());
+        assertEquals(Message.USER_CREATED, Objects.requireNonNull(response.getBody()).getMessage().get(0));
     }
 
 }

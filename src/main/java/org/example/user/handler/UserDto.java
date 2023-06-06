@@ -4,17 +4,17 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.utility.Response;
-import org.example.utility.Validator;
+import org.example.utility.response.Message;
+import org.example.utility.response.Validator;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    @NotBlank(message = Response.INVALID_EMAIL)
-    @Email(message = Response.INVALID_EMAIL)
+    @NotBlank(message = Message.INVALID_EMAIL)
+    @Email(message = Message.INVALID_EMAIL)
     private String email;
 
-    @Pattern(regexp = Validator.PASSWORD_REGEXP, message = Response.INVALID_PASSWORD)
+    @Pattern(regexp = Validator.PASSWORD_REGEXP, message = Message.INVALID_PASSWORD)
     private String password;
 }

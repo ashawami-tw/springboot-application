@@ -7,7 +7,7 @@ import org.example.user.handler.UserDto;
 
 import java.util.UUID;
 
-import static org.example.utility.Response.INVALID_EMAIL;
+import static org.example.utility.response.Message.INVALID_EMAIL;
 
 @Getter
 @Entity(name = "user")

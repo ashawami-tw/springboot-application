@@ -1,4 +1,4 @@
-package org.example.utility;
+package org.example.utility.response;
 
 public class Validator {
     public static final int PASSWORD_MIN_SIZE = 8;
