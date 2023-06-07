@@ -3,6 +3,7 @@ package org.example.unit.user.service;
 import org.example.user.repository.User;
 import org.example.user.repository.UserRepo;
 import org.example.user.service.UserService;
+import org.example.utility.AppConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -21,11 +24,16 @@ public class UserServiceTest {
     private static final String EMAIL = "test@gmail.cm";
     private static final String PASSWORD = "test123@T";
 
+    private static final String HASH_PASSWORD = "$2a$10$EzbrJCN8wj8M8B5aQiRmiuWqVvnxna73Ccvm38aoneiJb88kkwlH2";
+
     @Mock
     private UserRepo userRepo;
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private AppConfig appConfig;
 
     @Captor
     private ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
@@ -48,24 +56,24 @@ public class UserServiceTest {
 
     @Test
     public void testHashPassword() {
-        String hash = "$2a$10$EzbrJCN8wj8M8B5aQiRmiuWqVvnxna73Ccvm38aoneiJb88kkwlH2";
         User user = User.builder().email(EMAIL).password(PASSWORD).build();
-        when(passwordEncoder.encode(PASSWORD)).thenReturn(hash);
+        when(passwordEncoder.encode(PASSWORD)).thenReturn(HASH_PASSWORD);
 
         userService.hashPassword(user);
 
         assertThat(user.getEmail()).isEqualTo(EMAIL);
-        assertThat(user.getPassword()).isEqualTo(hash);
+        assertThat(user.getPassword()).isEqualTo(HASH_PASSWORD);
     }
 
     @Test
     public void testUserExists() {
-        User user = new User();
+        User user = User.builder().email(EMAIL).password(PASSWORD).build();
         when(userRepo.findByEmail(EMAIL)).thenReturn(user);
 
-        boolean isUserPresent = userService.userExists(EMAIL);
+        Optional<User> savedUser = userService.getUser(user.getEmail());
 
-        assertThat(isUserPresent).isTrue();
+        assertThat(savedUser.isPresent()).isTrue();
+        assertThat(savedUser.get().getEmail()).isEqualTo(user.getEmail());
         verify(userRepo).findByEmail(EMAIL);
     }
 
@@ -73,9 +81,29 @@ public class UserServiceTest {
     public void testUserDoesNotExists() {
         when(userRepo.findByEmail(EMAIL)).thenReturn(null);
 
-        boolean isUserPresent = userService.userExists(EMAIL);
+        Optional<User> savedUser = userService.getUser(EMAIL);
 
-        assertThat(isUserPresent).isFalse();
+        assertThat(savedUser.isPresent()).isFalse();
         verify(userRepo).findByEmail(EMAIL);
+    }
+
+    @Test
+    public void testLoginPasswordIsCorrect() {
+        User user = User.builder().email(EMAIL).password(HASH_PASSWORD).build();
+        when(appConfig.decodePassword(HASH_PASSWORD, PASSWORD)).thenReturn(true);
+
+        boolean isCorrect = userService.comparePassword(user, PASSWORD);
+
+        assertThat(isCorrect).isTrue();
+    }
+
+    @Test
+    public void testLoginPasswordIsInCorrect() {
+        User user = User.builder().email(EMAIL).password(HASH_PASSWORD).build();
+        when(appConfig.decodePassword(HASH_PASSWORD, PASSWORD)).thenReturn(false);
+
+        boolean isCorrect = userService.comparePassword(user, PASSWORD);
+
+        assertThat(isCorrect).isFalse();
     }
 }

@@ -32,7 +32,7 @@ public class UserHandler {
     @PostMapping
     public ResponseEntity<Response> create(@Valid @RequestBody UserDto userDto) {
         User user = User.create(userDto);
-        if(userService.userExists(user.getEmail())) {
+        if(userService.getUser(user.getEmail()).isPresent()) {
             logger.error("User already exists");
             return Response.create(List.of(Message.EMAIL_ALREADY_EXISTS), HttpStatus.BAD_REQUEST);
         }

@@ -2,6 +2,7 @@ package org.example.unit.user.handler;
 
 import org.example.user.handler.UserDto;
 import org.example.user.handler.UserHandler;
+import org.example.user.repository.User;
 import org.example.user.service.UserService;
 import org.example.utility.response.Message;
 import org.example.utility.response.Response;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -32,7 +34,8 @@ public class UserHandlerTest {
     @Test
     public void testUserAlreadyExists() {
         UserDto userDto = new UserDto(EMAIL, PASSWORD);
-        when(userService.userExists(EMAIL)).thenReturn(true);
+        User user = User.create(userDto);
+        when(userService.getUser(EMAIL)).thenReturn(Optional.of(user));
 
         ResponseEntity<Response> response = userHandler.create(userDto);
 
@@ -43,7 +46,7 @@ public class UserHandlerTest {
     @Test
     public void testCreateUser() {
         UserDto userDto = new UserDto(EMAIL, PASSWORD);
-        when(userService.userExists(EMAIL)).thenReturn(false);
+        when(userService.getUser(EMAIL)).thenReturn(Optional.empty());
 
         ResponseEntity<Response> response = userHandler.create(userDto);
 
