@@ -8,18 +8,16 @@ import java.util.List;
 
 @Getter
 public class Response {
-    private int status;
     private List<String> message;
 
-    private static Response get(List<String> message, int status) {
+    private static Response get(List<String> message) {
         Response response = new Response();
-        response.status = status;
         response.message = message;
         return response;
     }
 
     public static ResponseEntity<Response> create(List<String> message, HttpStatus status) {
-        return new ResponseEntity<>(Response.get(message, status.value()), status);
+        return new ResponseEntity<>(Response.get(message), status);
     }
 }
 
